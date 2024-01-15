@@ -32,6 +32,8 @@ echo "Cloning destination git repository"
 git config --global --add safe.directory /github/workspace
 git clone "https://$API_TOKEN_GITHUB@github.com/$INPUT_DESTINATION_REPOSITORY.git" "$CLONE_DIR"
 
+cd "$CLONE_DIR"
+
 BRANCH_EXISTS=$(git show-ref "$INPUT_DESTINATION_HEAD_BRANCH" | wc -l)
 
 echo "Checking if branch already exists"
@@ -69,7 +71,6 @@ while [ -n "$INPUT_SOURCE_FOLDERS" ] && [ -n "$INPUT_DESTINATION_FOLDERS" ]; do
   rsync -a --delete "$HOME_DIR/$source_folder" "$CLONE_DIR/$destination_folder/"
 done
 
-cd "$CLONE_DIR"
 git add .
 
 if git status | grep -q "Changes to be committed"; then
