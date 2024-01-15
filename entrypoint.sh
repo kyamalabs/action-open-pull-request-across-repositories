@@ -21,13 +21,6 @@ for param in $required_params; do
   fi
 done
 
-if [ -z "$INPUT_PULL_REQUEST_REVIEWERS" ]
-then
-  PULL_REQUEST_REVIEWERS=$INPUT_PULL_REQUEST_REVIEWERS
-else
-  PULL_REQUEST_REVIEWERS='-r '$INPUT_PULL_REQUEST_REVIEWERS
-fi
-
 HOME_DIR=$PWD
 CLONE_DIR=$(mktemp -d)
 
@@ -97,11 +90,18 @@ if git status | grep -q "Changes to be committed"; then
     git push -u origin HEAD:"$INPUT_DESTINATION_HEAD_BRANCH"
 
     echo "Creating a pull request"
-    gh pr create -t "$INPUT_PR_TITLE" \
-                 -b "https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA" \
-                 -B "$INPUT_DESTINATION_BASE_BRANCH" \
-                 -H "$INPUT_DESTINATION_HEAD_BRANCH" \
-                 "$PULL_REQUEST_REVIEWERS"
+    if [ -n "$INPUT_PULL_REQUEST_REVIEWERS" ]; then
+      gh pr create -t "$INPUT_PR_TITLE" \
+                   -b "https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA" \
+                   -B "$INPUT_DESTINATION_BASE_BRANCH" \
+                   -H "$INPUT_DESTINATION_HEAD_BRANCH" \
+                   -r "$INPUT_PULL_REQUEST_REVIEWERS"
+    else
+      gh pr create -t "$INPUT_PR_TITLE" \
+                   -b "https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA" \
+                   -B "$INPUT_DESTINATION_BASE_BRANCH" \
+                   -H "$INPUT_DESTINATION_HEAD_BRANCH"
+    fi
   fi
 else
   echo "No changes detected"
