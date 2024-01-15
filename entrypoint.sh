@@ -57,7 +57,7 @@ echo "Copying files"
 IFS=','
 
 while IFS=, read -r source_folder destination_folder && [ -n "$source_folder" ] && [ -n "$destination_folder" ]; do
-  echo "$source_folder" \ "$destination_folder"
+  echo "summmma" "$source_folder" \ "$destination_folder"
   sleep 5
 #  rsync -a --delete "$HOME_DIR/$source_folder" "$CLONE_DIR/$destination_folder/"
 done <<EOF
