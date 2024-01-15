@@ -1,0 +1,43 @@
+name: 'Open Pull Requests Across Repositories'
+description: 'Used to open pull requests in another repository while tracking origin source folders'
+inputs:
+  destination-repository:
+    description: 'Destination repository'
+    required: true
+  source-folders:
+    description: 'Comma separated source folders'
+    required: true
+  destination-folders:
+    description: 'Comma separated destination folders'
+    required: false
+  destination-head-branch:
+    description: 'The branch to create to push the changes'
+    required: true
+  pr-title:
+    description: 'The PR title which will be defined in the PR'
+    required: true
+  commit-message:
+    description: 'The commit message to be used'
+    required: true
+  destination-base-branch:
+    description: 'The branch into which you want your PR merged'
+    required: false
+    default: "main"
+  pull-request-reviewers:
+    description: 'Pull request reviewers'
+    required: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.destination-repository }}
+    - ${{ inputs.source-folders }}
+    - ${{ inputs.destination-folders }}
+    - ${{ inputs.destination-head-branch }}
+    - ${{ inputs.pr-title }}
+    - ${{ inputs.commit-message }}
+    - ${{ inputs.destination-base-branch }}
+    - ${{ inputs.pull-request-reviewers }}
+branding:
+  icon: 'git-branch'
+  color: 'purple'
