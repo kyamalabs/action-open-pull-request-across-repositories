@@ -70,6 +70,9 @@ while [ -n "$INPUT_SOURCE_FOLDERS" ] && [ -n "$INPUT_DESTINATION_FOLDERS" ]; do
 
   last_destination_folder="$destination_folder"
 
+  destination_path="$CLONE_DIR/$destination_folder"
+  mkdir -p "$destination_path"
+
   rsync -a --delete "$HOME_DIR/$source_folder" "$CLONE_DIR/$destination_folder/"
 done
 
