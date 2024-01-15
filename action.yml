@@ -30,14 +30,14 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.destination-repository }}
-    - ${{ inputs.source-folders }}
-    - ${{ inputs.destination-folders }}
-    - ${{ inputs.destination-head-branch }}
-    - ${{ inputs.pr-title }}
-    - ${{ inputs.commit-message }}
-    - ${{ inputs.destination-base-branch }}
-    - ${{ inputs.pull-request-reviewers }}
+    - ${{ inputs.destination_repository }}
+    - ${{ inputs.source_folders }}
+    - ${{ inputs.destination_folders }}
+    - ${{ inputs.destination_head_branch }}
+    - ${{ inputs.pr_title }}
+    - ${{ inputs.commit_message }}
+    - ${{ inputs.destination_base_branch }}
+    - ${{ inputs.pull_request_reviewers }}
 branding:
   icon: 'git-branch'
   color: 'purple'

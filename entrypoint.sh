@@ -3,8 +3,6 @@
 set -e
 set -x
 
-env
-
 required_params="
   INPUT_DESTINATION_REPOSITORY
   INPUT_SOURCE_FOLDERS
@@ -14,12 +12,6 @@ required_params="
   INPUT_COMMIT_MESSAGE
   INPUT_DESTINATION_BASE_BRANCH
 "
-
-if [ -z "$INPUT_DESTINATION_REPOSITORY" ]
-then
-  echo "Destination repository must be defined"
-  return 1
-fi
 
 for param in $required_params; do
   eval "value=\$$param"
