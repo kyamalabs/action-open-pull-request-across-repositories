@@ -76,6 +76,7 @@ while [ -n "$INPUT_SOURCE_FOLDERS" ] && [ -n "$INPUT_DESTINATION_FOLDERS" ]; do
   rsync -a --delete "$HOME_DIR/$source_folder" "$CLONE_DIR/$destination_folder/"
 done
 
+cd "$CLONE_DIR"
 git add .
 
 if git status | grep -q "Changes to be committed"; then
