@@ -55,14 +55,27 @@ echo "Copying files"
 [ "$(echo "$INPUT_SOURCE_FOLDERS" | tr -cd ',' | wc -c)" -ne "$(echo "$INPUT_DESTINATION_FOLDERS" | tr -cd ',' | wc -c)" ] && exit 1
 
 IFS=','
+last_destination_folder=""
 
-while IFS=, read -r source_folder destination_folder && [ -n "$source_folder" ] && [ -n "$destination_folder" ]; do
-  echo "summmma" "$source_folder" \ "$destination_folder"
+while [ -n "$INPUT_SOURCE_FOLDERS" ] && [ -n "$INPUT_DESTINATION_FOLDERS" ]; do
+  source_folder="${INPUT_SOURCE_FOLDERS%%,*}"
+  INPUT_SOURCE_FOLDERS="${INPUT_SOURCE_FOLDERS#*,}"
+
+  destination_folder="${INPUT_DESTINATION_FOLDERS%%,*}"
+  INPUT_DESTINATION_FOLDERS="${INPUT_DESTINATION_FOLDERS#*,}"
+
+  if [ "$last_destination_folder" = "$destination_folder" ]; then
+      break
+  fi
+
+  last_destination_folder="$destination_folder"
+
+  echo "was eun"
+
   sleep 5
+
 #  rsync -a --delete "$HOME_DIR/$source_folder" "$CLONE_DIR/$destination_folder/"
-done <<EOF
-$INPUT_SOURCE_FOLDERS,$INPUT_DESTINATION_FOLDERS
-EOF
+done
 
 git add .
 
