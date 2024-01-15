@@ -81,11 +81,8 @@ if git status | grep -q "Changes to be committed"; then
     git push -u --force origin HEAD:"$INPUT_DESTINATION_HEAD_BRANCH"
 
     echo "Updating pull request"
-    CURRENT_BODY=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-      "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=$INPUT_DESTINATION_HEAD_BRANCH&base=$INPUT_DESTINATION_BASE_BRANCH" \
-      | jq -r '.[0].body')
-
-    gh pr edit "$INPUT_DESTINATION_HEAD_BRANCH" -b "$CURRENT_BODY & https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+    CURRENT_BODY=gh pr view "$INPUT_DESTINATION_HEAD_BRANCH" --json body | jq -r '.body'
+    gh pr edit "$INPUT_DESTINATION_HEAD_BRANCH" -b "$(printf "%s\nhttps://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA" "$CURRENT_BODY")"
   else
     echo "Pushing git commit"
     git push -u --force origin HEAD:"$INPUT_DESTINATION_HEAD_BRANCH"
