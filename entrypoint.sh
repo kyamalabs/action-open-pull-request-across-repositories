@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/sh -l
 
 set -e
 set -x
@@ -52,19 +52,20 @@ fi
 
 echo "Copying files"
 
-IFS=',' read -ra source_folders <<< "$INPUT_SOURCE_FOLDERS"
-IFS=',' read -ra destination_folders <<< "$INPUT_DESTINATION_FOLDERS"
+[ "$(echo "$INPUT_SOURCE_FOLDERS" | tr -cd ',' | wc -c)" -ne "$(echo "$INPUT_DESTINATION_FOLDERS" | tr -cd ',' | wc -c)" ] && exit 1
 
-if [ "${#source_folders[@]}" -ne "${#destination_folders[@]}" ]; then
-    echo "Number of source and destination folders must match"
-    exit 1
-fi
+IFS=','
 
-for ((i=0; i<${#source_folders[@]}; i++)); do
-    source_folder="${source_folders[i]}"
-    destination_folder="${destination_folders[i]}"
+set -- "$INPUT_SOURCE_FOLDERS"
+set -- "$INPUT_DESTINATION_FOLDERS"
 
-    rsync -a --delete "$HOME_DIR/$source_folder" "$CLONE_DIR/$destination_folder/"
+while [ $# -gt 0 ]; do
+  source_folder="$1"
+  destination_folder="$2"
+
+  rsync -a --delete "$HOME_DIR/$source_folder" "$CLONE_DIR/$destination_folder/"
+
+  shift 2
 done
 
 git add .
