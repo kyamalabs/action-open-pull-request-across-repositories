@@ -77,7 +77,7 @@ if git status | grep -q "Changes to be committed"; then
 
   if [ "$BRANCH_EXISTS" -eq 1 ]; then
     echo "Pushing git commit"
-    git push -u origin HEAD:"$INPUT_DESTINATION_HEAD_BRANCH"
+    git push -u --force origin HEAD:"$INPUT_DESTINATION_HEAD_BRANCH"
 
     echo "Updating pull request"
     CURRENT_BODY=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
@@ -87,7 +87,7 @@ if git status | grep -q "Changes to be committed"; then
     gh pr edit "$INPUT_DESTINATION_HEAD_BRANCH" -b "$CURRENT_BODY & https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
   else
     echo "Pushing git commit"
-    git push -u origin HEAD:"$INPUT_DESTINATION_HEAD_BRANCH"
+    git push -u --force origin HEAD:"$INPUT_DESTINATION_HEAD_BRANCH"
 
     echo "Creating a pull request"
     if [ -n "$INPUT_PULL_REQUEST_REVIEWERS" ]; then
