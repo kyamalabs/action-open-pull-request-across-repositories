@@ -25,8 +25,8 @@ HOME_DIR=$PWD
 CLONE_DIR=$(mktemp -d)
 
 echo "Setting git variables"
-git config --global user.email "ext-services-kyamagames@users.noreply.github.com"
-git config --global user.name "ext-services-kyamagames"
+git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+git config --global user.name "$GITHUB_ACTOR"
 
 echo "Cloning destination git repository"
 git config --global --add safe.directory /github/workspace
