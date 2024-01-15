@@ -13,6 +13,12 @@ required_params="
   INPUT_DESTINATION_BASE_BRANCH
 "
 
+if [ -z "$INPUT_DESTINATION_REPOSITORY" ]
+then
+  echo "Destination repository must be defined"
+  return 1
+fi
+
 for param in $required_params; do
   eval "value=\$$param"
   if [ -z "$value" ]; then
@@ -36,7 +42,7 @@ git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
 git config --global user.name "$GITHUB_ACTOR"
 
 echo "Cloning destination git repository"
-git clone "https://$API_TOKEN_GITHUB@github.com/$INPUT_DESTINATION_REPO.git" "$CLONE_DIR"
+git clone "https://$API_TOKEN_GITHUB@github.com/$INPUT_DESTINATION_REPOSITORY.git" "$CLONE_DIR"
 
 BRANCH_EXISTS=$(git show-ref "$INPUT_DESTINATION_HEAD_BRANCH" | wc -l)
 
@@ -69,7 +75,7 @@ done
 git add .
 
 if git status | grep -q "Changes to be committed"; then
-  git commit --message "$INPUT_COMMIT_MSG"
+  git commit --message "$INPUT_COMMIT_MESSAGE"
 
   if [ "$BRANCH_EXISTS" -eq 1 ]; then
     echo "Pushing git commit"
