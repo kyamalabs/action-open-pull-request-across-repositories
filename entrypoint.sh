@@ -34,21 +34,21 @@ CLONE_DIR=$(mktemp -d)
 echo "Setting git variables"
 git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
 git config --global user.name "$GITHUB_ACTOR"
-#
-#echo "Cloning destination git repository"
-#git config --global --add safe.directory /github/workspace
-#git clone "https://$API_TOKEN_GITHUB@github.com/$INPUT_DESTINATION_REPOSITORY.git" "$CLONE_DIR"
-#
-#BRANCH_EXISTS=$(git show-ref "$INPUT_DESTINATION_HEAD_BRANCH" | wc -l)
-#
-#echo "Checking if branch already exists"
-#git fetch -a
-#if [ "$BRANCH_EXISTS" = 1 ];
-#then
-#    git checkout "$INPUT_DESTINATION_HEAD_BRANCH"
-#else
-#    git checkout -b "$INPUT_DESTINATION_HEAD_BRANCH"
-#fi
+
+echo "Cloning destination git repository"
+git config --global --add safe.directory /github/workspace
+git clone "https://$API_TOKEN_GITHUB@github.com/$INPUT_DESTINATION_REPOSITORY.git" "$CLONE_DIR"
+
+BRANCH_EXISTS=$(git show-ref "$INPUT_DESTINATION_HEAD_BRANCH" | wc -l)
+
+echo "Checking if branch already exists"
+git fetch -a
+if [ "$BRANCH_EXISTS" = 1 ];
+then
+    git checkout "$INPUT_DESTINATION_HEAD_BRANCH"
+else
+    git checkout -b "$INPUT_DESTINATION_HEAD_BRANCH"
+fi
 
 echo "Copying files"
 
@@ -70,11 +70,7 @@ while [ -n "$INPUT_SOURCE_FOLDERS" ] && [ -n "$INPUT_DESTINATION_FOLDERS" ]; do
 
   last_destination_folder="$destination_folder"
 
-  echo "was eun"
-
-  sleep 5
-
-#  rsync -a --delete "$HOME_DIR/$source_folder" "$CLONE_DIR/$destination_folder/"
+  rsync -a --delete "$HOME_DIR/$source_folder" "$CLONE_DIR/$destination_folder/"
 done
 
 git add .
