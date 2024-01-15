@@ -36,7 +36,7 @@ BRANCH_EXISTS=$(git show-ref "$INPUT_DESTINATION_HEAD_BRANCH" | wc -l)
 
 echo "Checking if branch already exists"
 git fetch -a
-if [ "$BRANCH_EXISTS" = 1 ];
+if [ "$BRANCH_EXISTS" -ge 1 ];
 then
     git checkout "$INPUT_DESTINATION_HEAD_BRANCH"
 else
@@ -75,7 +75,7 @@ git add .
 if git status | grep -q "Changes to be committed"; then
   git commit --message "$INPUT_COMMIT_MESSAGE"
 
-  if [ "$BRANCH_EXISTS" -eq 1 ]; then
+  if [ "$BRANCH_EXISTS" -ge 1 ]; then
     echo "Pushing git commit"
     git push -u --force origin HEAD:"$INPUT_DESTINATION_HEAD_BRANCH"
 
