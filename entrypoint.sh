@@ -3,6 +3,8 @@
 set -e
 set -x
 
+env
+
 required_params="
   INPUT_DESTINATION_REPOSITORY
   INPUT_SOURCE_FOLDERS
