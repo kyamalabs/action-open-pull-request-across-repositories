@@ -34,7 +34,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: Open PR
-      uses: kyamalabs/action-open-pull-request-across-repositories@version
+      uses: kyamalabs/action-open-pull-request-across-repositories@0.1.0
       with:
         destination-repository: 'owner/repo'
         source-folders: 'folder1,folder2'
