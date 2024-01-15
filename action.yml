@@ -1,29 +1,29 @@
 name: 'Open Pull Requests Across Repositories'
 description: 'Used to open pull requests in another repository while tracking origin source folders'
 inputs:
-  destination-repository:
+  destination_repository:
     description: 'Destination repository'
     required: true
-  source-folders:
+  source_folders:
     description: 'Comma separated source folders'
     required: true
-  destination-folders:
+  destination_folders:
     description: 'Comma separated destination folders'
     required: false
-  destination-head-branch:
+  destination_head_branch:
     description: 'The branch to create to push the changes'
     required: true
-  pr-title:
+  pr_title:
     description: 'The PR title which will be defined in the PR'
     required: true
-  commit-message:
+  commit_message:
     description: 'The commit message to be used'
     required: true
-  destination-base-branch:
+  destination_base_branch:
     description: 'The branch into which you want your PR merged'
     required: false
     default: "main"
-  pull-request-reviewers:
+  pull_request_reviewers:
     description: 'Pull request reviewers'
     required: false
 runs:
