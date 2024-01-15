@@ -32,7 +32,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-      
+
     - name: Open PR
       uses: kyamalabs/action-open-pull-request-across-repositories@0.1.0
       with:
