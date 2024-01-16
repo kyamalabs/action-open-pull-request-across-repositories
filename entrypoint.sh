@@ -76,7 +76,13 @@ git add .
 if git status | grep -q "Changes to be committed"; then
   git commit --message "$INPUT_COMMIT_MESSAGE"
 
-  if [ "$BRANCH_EXISTS" -ge 1 ]; then
+  PR_OPEN=false
+  PR_CLOSED=$(gh pr view "$INPUT_DESTINATION_HEAD_BRANCH" --json closed | jq -r '.closed')
+  if [ "$PR_CLOSED" = "false" ]; then
+      PR_OPEN=true
+  fi
+
+  if [ "$PR_OPEN" = true ]; then
     echo "Pushing git commit"
     git push -u --force origin HEAD:"$INPUT_DESTINATION_HEAD_BRANCH"
 
