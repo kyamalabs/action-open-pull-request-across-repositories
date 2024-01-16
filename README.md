@@ -7,51 +7,55 @@ This GitHub Action is designed to open pull requests in another repository while
 
 ## Inputs
 
-- **destination-repository (required):** Destination repository.
-- **source-folders (required):** Comma-separated source folders.
-- **destination-folders (optional):** Comma-separated destination folders.
-- **destination-head-branch (required):** The branch to create to push the changes.
-- **pr-title (required):** The PR title which will be defined in the PR.
-- **commit-message (required):** The commit message to be used.
-- **destination-base-branch (optional, default: "main"):** The branch into which you want your PR merged.
-- **pull-request-reviewers (optional):** Pull request reviewers.
+- **destination_repository (required):** Destination repository.
+- **source_folders (required):** Comma-separated source folders.
+- **destination_folders (optional):** Comma-separated destination folders.
+- **destination_head_branch (required):** The branch to create to push the changes.
+- **pr_title (required):** The PR title which will be defined in the PR.
+- **commit_message (required):** The commit message to be used.
+- **destination_base_branch (optional, default: "main"):** The branch into which you want your PR merged.
+- **pull_request_reviewers (optional):** Pull request reviewers.
 
-## Example Action
+## Example Workflow
 
 ```yaml
 name: Open PR Across Repos
 
 on:
-  pull_request:
+  push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  open-pr:
+  update_shared_proto:
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
 
-    - name: Open PR
-      uses: kyamalabs/action-open-pull-request-across-repositories@0.1.0
-      with:
-        destination-repository: 'owner/repo'
-        source-folders: 'folder1,folder2'
-        destination-folders: 'dest1,dest2'
-        destination-head-branch: 'feature-branch'
-        pr-title: 'Update from source folders'
-        commit-message: 'Sync changes from source folders'
-        destination-base-branch: 'main'
-        pull-request-reviewers: 'username1,username2'
-      env:
-        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Open PR Across Repos
+        uses: kyamalabs/action-open-pull-request-across-repositories@v0.1.23
+        with:
+          destination_repository: 'owner/repo'
+          source_folders: 'folder1,folder2'
+          destination_folders: 'dest1,dest2'
+          destination_head_branch: 'feature-branch'
+          pr_title: 'Update from source folders'
+          commit_message: 'Sync changes from source folders'
+          destination_base_branch: 'main'
+          pull_request_reviewers: 'john_doe'
+        env:
+          GITHUB_TOKEN: ${{ secrets.CUSTOM_PAT }}
+          API_TOKEN_GITHUB: ${{ secrets.CUSTOM_PAT }}
 ```
 
-## Important Note
+## Important Notes
 
-Make sure to specify `API_TOKEN_GITHUB` as a secret in your repository. This token should have the following scopes: `'repo = Full control of private repositories', 'admin:org = read:org', and 'write:discussion = Read:discussion'`.
+- Make sure to specify `API_TOKEN_GITHUB` as a secret in your repository. This token should have the following scopes: `'repo = Full control of private repositories', 'admin:org = read:org', and 'write:discussion = Read:discussion'`.
 Note: The `API_TOKEN_GITHUB` is a personal access token with the required scopes. Keep it secure and do not expose it publicly.
+- The action automatically generates destination paths if they are absent, overwriting existing files in the specified locations.
+- Subsequent workflow executions will perform a force push to the specified branch, leading to the replacement of previous content.
 
 ## Acknowledgment
 
